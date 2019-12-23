@@ -4,30 +4,44 @@
       <el-header>温湿度监测</el-header>
       <el-main>
         <el-row :gutter="20">
-          <el-col :span="12"> <monitor name="阳台温度"/></el-col>
-          <el-col :span="12"> <monitor name="室内温度"/></el-col>
+          <el-col :span="12">
+            <monitor name="阳台温度" />
+          </el-col>
+          <el-col :span="12">
+            <monitor name="室内温度" />
+          </el-col>
         </el-row>
+        <el-button type="primary" @click="refreshData">Refresh Data</el-button>
       </el-main>
     </el-container>
     <el-row>
-      <el-button type="primary" @click="refreshData"> Refresh Data </el-button>
+      <el-header>数据测试</el-header>
+      <el-main>
+        <el-row :gutter="0">
+          <WeatherHumidityTestView />         
+        </el-row>
+      </el-main>
     </el-row>
   </div>
 </template>
 
 <script>
 import Monitor from "./Monitor.vue";
-import { log } from 'util';
+import WeatherHumidityTestView from "./WeatherHumidityTestView.vue";
+import { log } from "util";
+import data from "../utils/data.js";
 
 export default {
-  components: { Monitor },
+  components: { Monitor, WeatherHumidityTestView },
   methods: {
     refreshData() {
-      this.$axios
-      .get('https://api.coindesk.com/v1/bpi/currentprice.json')
-      .then(response => {
-        log(response)
-      })
+      // this.$axios
+      // .get('/1.1/classes/Product?limit=10&&order=-updatedAt&&')
+      data.queryData("Product").then(response => {
+        // let data = JSON.parse(response)
+        let data = response.data;
+        log(data.results[0].title);
+      });
     }
   }
 };
@@ -36,7 +50,7 @@ export default {
 <style>
 .el-header,
 .el-footer {
-  background-color: #409EFF;
+  background-color: #409eff;
   border-radius: 8px;
   color: #fff;
   font-size: 1.8em;
