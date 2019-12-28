@@ -5,7 +5,7 @@
       <el-main>
         <el-row :gutter="20">
           <el-col :span="12">
-            <monitor name="阳台温度" />
+            <monitor :records="records" name="阳台温度" />
           </el-col>
           <el-col :span="12">
             <monitor name="室内温度" />
@@ -33,14 +33,38 @@ import data from "../utils/data.js";
 
 export default {
   components: { Monitor, WeatherHumidityTestView },
+  data: function() {
+    return {
+      records: [],
+    }
+  },
   methods: {
     refreshData() {
-      // this.$axios
-      // .get('/1.1/classes/Product?limit=10&&order=-updatedAt&&')
-      data.queryData("Product").then(response => {
-        // let data = JSON.parse(response)
+      data.queryData("TH").then(response => {
         let data = response.data;
+        let tempArr = []
+        for (let i in data.results) {
+          let record = data.results[i]
+          let temperature = record.weather
+          let humidity = record.humidity
+          let time = new Date(Date.parse(record.createdAt))
+          let date = `${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()}`
+          tempArr.push({
+            temperature,
+            humidity,
+            date,
+          })
+          this.records = tempArr
+        }
         log(data.results[0].title);
+        this.$notify.success({
+          title: "Refresh records success"
+        })
+      }).catch(err => {
+        this.$$notify.err({
+          title: "Refresh failure",
+          message: err,          
+        })
       });
     }
   }
