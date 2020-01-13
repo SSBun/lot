@@ -2,17 +2,11 @@ import vue from '../main.js'
 
 // get('/1.1/classes/Product?limit=10&&order=-updatedAt&&')
 export default {
-    /**
-     * 
-     * @param {string} name The class name you want to query.
-     * @param {int} limit Query count.
-     */
-    queryData(name, limit) {
-        return vue.$axios.get('/1.1/classes/'+name,{limit:limit, order:'-updatedAt'})
+    queryTH() {
+        return vue.$axios.get('/lot/th/')
     },
 
-    insertData(name, object) {
-        return vue.$axios.post('/1.1/classes/'+name, object)
+    uploadTH(temperature, humidity) {
+        return vue.$axios.get(`/lot/th/add/${temperature}/${humidity}`)
     },
-
 }

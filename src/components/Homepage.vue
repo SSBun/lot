@@ -40,14 +40,14 @@ export default {
   },
   methods: {
     refreshData() {
-      data.queryData("TH").then(response => {
-        let data = response.data;
+      data.queryTH().then(response => {      
+        let data = response.data.reverse()
         let tempArr = []
-        for (let i in data.results) {
-          let record = data.results[i]
-          let temperature = record.weather
+        for (let i in data) {
+          let record = data[i]
+          let temperature = record.temperature
           let humidity = record.humidity
-          let time = new Date(Date.parse(record.createdAt))
+          let time = new Date(Date.parse(record.created_date))
           let date = `${time.getUTCHours()}:${time.getUTCMinutes()}:${time.getUTCSeconds()}`
           tempArr.push({
             temperature,
@@ -56,10 +56,10 @@ export default {
           })
           this.records = tempArr
         }
-        log(data.results[0].title);
         this.$notify.success({
           title: "Refresh records success"
         })
+        log(data.results[0].title);       
       }).catch(err => {
         this.$$notify.err({
           title: "Refresh failure",

@@ -44,7 +44,7 @@ export default {
   methods: {
     uploadData() {
       data
-        .insertData("TH", this.form)
+        .uploadTH(this.form.weather, this.form.humidity)
         .then(response => {
           log(response);
           this.$notify({
