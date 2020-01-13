@@ -1,5 +1,7 @@
 # lot
 
+The lot project monitor.
+
 ## Project setup
 ```
 npm install
