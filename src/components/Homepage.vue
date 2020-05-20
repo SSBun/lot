@@ -11,7 +11,7 @@
             <monitor name="室内温度" />
           </el-col>
         </el-row>
-        <el-button type="primary" @click="refreshData">Refresh Data</el-button>
+        <el-button type="primary" @click="refreshData(true)">Refresh Data</el-button>
       </el-main>
     </el-container>
     <el-row>
@@ -35,11 +35,12 @@ export default {
   components: { Monitor, WeatherHumidityTestView },
   data: function() {
     return {
+      timer: '',
       records: [],
     }
   },
   methods: {
-    refreshData() {
+    refreshData(showMessage) {
       data.queryTH().then(response => {      
         let data = response.data.reverse()
         let tempArr = []
@@ -56,9 +57,11 @@ export default {
           })
           this.records = tempArr
         }
-        this.$notify.success({
-          title: "Refresh records success"
-        })
+        if (showMessage) {
+          this.$notify.success({
+            title: "Refresh records success"
+          })
+        }
         log(data.results[0].title);       
       }).catch(err => {
         this.$$notify.err({
@@ -67,6 +70,9 @@ export default {
         })
       });
     }
+  },
+  mounted() {
+    this.timer = setInterval(() => this.refreshData(false), 5000)
   }
 };
 </script>
